@@ -17,6 +17,9 @@ soundOnImage.src = "img/soundOn.png";
 const soundOffImage = new Image();
 soundOffImage.src = "img/soundOff.png";
 
+const highScoreImg = new Image();
+highScoreImg.src = "img/highScore.png";
+
 const wallHit = new Audio();
 wallHit.src = "sounds/wall.mp3";
 

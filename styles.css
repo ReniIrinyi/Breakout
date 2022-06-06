@@ -26,29 +26,30 @@ header ul {
 .rules {
   display: none;
 }
-.sound {
+#sound {
   width: 30px;
   height: 30px;
   cursor: pointer;
   position: absolute;
-  top: 465px;
-  left: 5px;
+  top: 525px;
+  left: 30px;
 }
 .gameover {
   position: absolute;
   width: 400px;
   height: 500px;
-  background: rgba(0, 0, 0);
+  background: rgba(0, 0, 0, 0.417);
   display: none;
 }
-.youwon {
+#youwon {
   width: 100px;
   position: absolute;
   top: 200px;
   left: 150px;
+  background: rgba(0, 0, 0, 0.576);
   display: none;
 }
-.youlose {
+#youlost {
   width: 400px;
   position: absolute;
   top: 100px;
@@ -62,4 +63,5 @@ header ul {
   cursor: pointer;
   font-size: 1.25em;
   color: #fff;
+  font-family: fantasy;
 }

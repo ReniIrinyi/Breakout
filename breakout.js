@@ -10,19 +10,19 @@ const paddleMarginBottom = 50;
 const paddleHeight = 20;
 let leftArrow = false;
 let rightArrow = false;
-let life = 1; //player has 5 life
+let life = 5;
 let score = 0;
 let level = 1;
 let gameOver = false;
 let highScore = 0;
-const maxLevel = 1;
+const maxLevel = 5;
 const ballRadius = 8;
 const scoreUnit = 10;
-const soundElement = document.querySelector(".sound");
+const soundElement = document.getElementById("sound");
 const game_over = document.querySelector(".gameover");
 const restart = document.querySelector(".restart");
-const youlose = document.querySelector(".youlose");
-const youwin = document.querySelector(".youwin");
+const youlose = document.getElementById("youlost");
+const youwin = document.getElementById("youwon");
 
 //Paddle
 const paddle = {
@@ -108,17 +108,21 @@ const drawBricks = function () {
   }
 };
 
-const audioManager = function () {
+soundElement.addEventListener("click", audioManager);
+function audioManager() {
   let imgSrc = soundElement.getAttribute("src");
   let soundImg =
-    imgSrc == "img/soundOn.png" ? "img/soundOff.png" : "img/soundOn.png";
+    imgSrc === "img/soundOn.png" ? "img/soundOff.png" : "img/soundOn.png";
   soundElement.setAttribute("src", soundImg);
   wallHit.muted = wallHit.muted ? false : true;
   lifeLost.muted = lifeLost.muted ? false : true;
   win.muted = win.muted ? false : true;
   paddleHit.muted = paddleHit.muted ? false : true;
   brickHit.muted = brickHit.muted ? false : true;
-};
+}
+restart.addEventListener("click", function () {
+  location.reload();
+});
 
 //game stats
 const gameStats = function (text, textX, textY, img, imgX, imgY) {
@@ -127,12 +131,6 @@ const gameStats = function (text, textX, textY, img, imgX, imgY) {
   canvasCtx.fillText(text, textX, textY);
   canvasCtx.drawImage(img, imgX, imgY, (width = 40), (height = 40));
 };
-
-soundElement.addEventListener("click", audioManager);
-
-restart.addEventListener("click", function () {
-  location.reload();
-});
 
 const showYourwin = function () {
   game_over.style.display = "block";
@@ -240,6 +238,7 @@ const gameOverfunction = function () {
   if (life <= 0) {
     showYourlose();
     gameOver = true;
+    highScore = score;
   }
 };
 const levelUp = function () {
@@ -255,6 +254,7 @@ const levelUp = function () {
     if (level >= maxLevel) {
       showYourwin();
       gameOver = true;
+      highScore = score;
       return;
     }
     brick.row++;
