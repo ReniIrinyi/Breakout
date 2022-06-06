@@ -11,8 +11,10 @@ const paddleHeight = 20;
 let leftArrow = false;
 let rightArrow = false;
 let life = 5; //player has 5 life
-const ballRadius = 8;
 let score = 0;
+let level = 1;
+const maxLevel = 10;
+const ballRadius = 8;
 const scoreUnit = 10;
 
 //Paddle
@@ -56,13 +58,13 @@ const drawBall = function () {
 
 //create the bricks
 const brick = {
-  row: 5,
+  row: 3,
   column: 5,
   width: 55,
   height: 20,
   offSetLeft: 20,
   offSetTop: 10,
-  marginTop: 20,
+  marginTop: 60,
   fillColor: "#fff200",
   strokeColor: "#ff3838",
 };
@@ -99,11 +101,22 @@ const drawBricks = function () {
   }
 };
 
+//game stats
+const gameStats = function (text, textX, textY, img, imgX, imgY) {
+  canvasCtx.fillStyle = "#fff";
+  canvasCtx.font = "24px Comic Sans MS";
+  canvasCtx.fillText(text, textX, textY);
+  canvasCtx.drawImage(img, imgX, imgY, (width = 40), (height = 40));
+};
+
 //draw function
 function draw() {
   drawPaddle();
   drawBall();
   drawBricks();
+  gameStats(score, 55, 35, scoreImage, 5, 5);
+  gameStats(life, 350, 482, lifeImage, 310, 450);
+  gameStats(level, 145, 35, levelImage, 100, 5);
 }
 
 //moving the ball
@@ -182,12 +195,6 @@ const movingPaddle = function () {
   if (rightArrow && paddle.x + paddle.width < canvas.width)
     paddle.x += paddle.dx;
   if (leftArrow && paddle.x > 0) paddle.x -= paddle.dx;
-};
-
-//game stats
-const gameStats = function (text, textX, textY, img, imgX, imgY) {
-  canvasCtx.fillStyle = "#fff";
-  canvasCtx.font = "24px Comic Sans MS";
 };
 
 //update function
