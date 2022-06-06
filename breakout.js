@@ -10,12 +10,19 @@ const paddleMarginBottom = 50;
 const paddleHeight = 20;
 let leftArrow = false;
 let rightArrow = false;
-let life = 5; //player has 5 life
+let life = 1; //player has 5 life
 let score = 0;
 let level = 1;
-const maxLevel = 10;
+let gameOver = false;
+let highScore = 0;
+const maxLevel = 1;
 const ballRadius = 8;
 const scoreUnit = 10;
+const soundElement = document.querySelector(".sound");
+const game_over = document.querySelector(".gameover");
+const restart = document.querySelector(".restart");
+const youlose = document.querySelector(".youlose");
+const youwin = document.querySelector(".youwin");
 
 //Paddle
 const paddle = {
@@ -101,12 +108,39 @@ const drawBricks = function () {
   }
 };
 
+const audioManager = function () {
+  let imgSrc = soundElement.getAttribute("src");
+  let soundImg =
+    imgSrc == "img/soundOn.png" ? "img/soundOff.png" : "img/soundOn.png";
+  soundElement.setAttribute("src", soundImg);
+  wallHit.muted = wallHit.muted ? false : true;
+  lifeLost.muted = lifeLost.muted ? false : true;
+  win.muted = win.muted ? false : true;
+  paddleHit.muted = paddleHit.muted ? false : true;
+  brickHit.muted = brickHit.muted ? false : true;
+};
+
 //game stats
 const gameStats = function (text, textX, textY, img, imgX, imgY) {
   canvasCtx.fillStyle = "#fff";
   canvasCtx.font = "24px Comic Sans MS";
   canvasCtx.fillText(text, textX, textY);
   canvasCtx.drawImage(img, imgX, imgY, (width = 40), (height = 40));
+};
+
+soundElement.addEventListener("click", audioManager);
+
+restart.addEventListener("click", function () {
+  location.reload();
+});
+
+const showYourwin = function () {
+  game_over.style.display = "block";
+  youwin.style.display = "block";
+};
+const showYourlose = function () {
+  game_over.style.display = "block";
+  youlose.style.display = "block";
 };
 
 //draw function
@@ -133,9 +167,12 @@ const resetBall = function () {
 const ballCollision = function () {
   if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0)
     ball.dx = -ball.dx;
+  // wallHit.play();
   if (ball.y - ball.radius < 0) ball.dy = -ball.dy;
+  // wallHit.play();
   if (ball.y + ball.radius > canvas.height) {
     life--;
+    lifeLost.play();
     resetBall();
   }
 };
@@ -148,6 +185,7 @@ const ballPaddleCollision = function () {
     paddle.y < paddle.y + paddle.height &&
     ball.y > paddle.y
   ) {
+    paddleHit.play();
     //where the ball hit the paddle
     let collisionPoint = ball.x - (paddle.x + paddle.width / 2);
     collisionPoint = collisionPoint / (paddle.width / 2);
@@ -169,6 +207,7 @@ const ballBrickCollision = function () {
           ball.y + ball.radius > b.y &&
           ball.y + ball.radius < b.y + brick.height
         ) {
+          brickHit.play();
           ball.dy = -ball.dy;
           b.status = false;
           score += scoreUnit;
@@ -197,6 +236,35 @@ const movingPaddle = function () {
   if (leftArrow && paddle.x > 0) paddle.x -= paddle.dx;
 };
 
+const gameOverfunction = function () {
+  if (life <= 0) {
+    showYourlose();
+    gameOver = true;
+  }
+};
+const levelUp = function () {
+  let islevelDone = true;
+
+  for (let r = 0; r < brick.row; r++) {
+    for (let c = 0; c < brick.column; c++) {
+      islevelDone = islevelDone && !bricks[r][c].status;
+    }
+  }
+  if (islevelDone) {
+    win.play();
+    if (level >= maxLevel) {
+      showYourwin();
+      gameOver = true;
+      return;
+    }
+    brick.row++;
+    createbricks();
+    ball.speed += 0.5;
+    resetBall();
+    level++;
+  }
+};
+
 //update function
 const update = function () {
   movingPaddle();
@@ -204,12 +272,16 @@ const update = function () {
   ballCollision();
   ballPaddleCollision();
   ballBrickCollision();
+  gameOverfunction();
+  levelUp();
 };
 
 const loop = function () {
   canvasCtx.drawImage(bgImage, 0, 0);
   draw();
   update();
-  requestAnimationFrame(loop);
+  if (!gameOver) {
+    requestAnimationFrame(loop);
+  }
 };
 loop();

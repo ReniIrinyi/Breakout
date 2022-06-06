@@ -3,11 +3,7 @@
   margin: 0px;
   padding: 0px;
 }
-h1 {
-  text-transform: uppercase;
-  text-align: center;
-  padding: 24px;
-}
+
 header ul {
   display: flex;
   padding: 24px;
@@ -20,33 +16,50 @@ header ul {
   height: 16px;
 }
 
-.rules--btn {
-  text-align: center;
-  padding: 15px;
-  top: 5rem;
-  left: 5rem;
-}
-
-.grid {
-  width: 565px;
-  height: 300px;
-  position: absolute;
-  background-color: #f8efba;
-  margin: 100px auto;
-}
-
 .block {
   position: absolute;
   width: 100px;
   height: 20px;
   background-color: #fea47f;
 }
-.user {
-  position: absolute;
-  width: 100px;
-  height: 20px;
-  background-color: #f97f51;
-}
+
 .rules {
   display: none;
+}
+.sound {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  position: absolute;
+  top: 465px;
+  left: 5px;
+}
+.gameover {
+  position: absolute;
+  width: 400px;
+  height: 500px;
+  background: rgba(0, 0, 0);
+  display: none;
+}
+.youwon {
+  width: 100px;
+  position: absolute;
+  top: 200px;
+  left: 150px;
+  display: none;
+}
+.youlose {
+  width: 400px;
+  position: absolute;
+  top: 100px;
+  left: 0px;
+  display: none;
+}
+.restart {
+  position: absolute;
+  top: 310px;
+  left: 155px;
+  cursor: pointer;
+  font-size: 1.25em;
+  color: #fff;
 }
